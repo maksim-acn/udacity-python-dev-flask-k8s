@@ -1,0 +1,21 @@
+# This is a sample aws-auth-patch.yml file. 
+# Actual aws-auth-patch.yml will be created when you run:
+# kubectl get configmap aws-auth -n kube-system -o yaml > aws-auth-patch.yml
+# Then edit the mapRoles section to add the UdacityFlaskDeployCBKubectlRole
+
+apiVersion: v1
+data:
+  mapRoles: |
+    - groups:
+      - system:bootstrappers
+      - system:nodes
+      rolearn: arn:aws:iam::<YOUR_AWS_ACCOUNT_ID>:role/<YOUR_EKS_NODE_INSTANCE_ROLE>
+      username: system:node:{{EC2PrivateDNSName}}
+    - groups:
+      - system:masters
+      rolearn: arn:aws:iam::<YOUR_AWS_ACCOUNT_ID>:role/UdacityFlaskDeployCBKubectlRole
+      username: build
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
