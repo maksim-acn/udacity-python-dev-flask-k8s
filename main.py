@@ -110,4 +110,7 @@ def contents():
 
 
 if __name__ == '__main__':
+    # This block is only executed when running the script directly (local development)
+    # properly. In production (Docker), Gunicorn is used as the entry point.
+    logger.info("Starting Flask application in local development mode")
     APP.run(host='0.0.0.0', port=8080, debug=True)
