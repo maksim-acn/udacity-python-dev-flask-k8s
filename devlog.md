@@ -77,7 +77,7 @@ Selected a combination of Option A (minimal AWS usage) and Option D (cost-optimi
 
 ---
 
-### Phase 2: Containerization ✅ READY
+### Phase 2: Containerization ✅ COMPLETE
 
 #### Files Created
 
@@ -86,14 +86,30 @@ Selected a combination of Option A (minimal AWS usage) and Option D (cost-optimi
 | `Dockerfile` | ✅ | Base: public.ecr.aws/sam/build-python3.7:latest |
 |  |  | Entry: gunicorn -b :8080 main:APP |
 |  |  | Exposed port: 8080 |
+|  |  | Image size: ~730MB |
 
-**Docker Status:** Configuration complete, awaiting Docker Desktop startup for build testing.
+**Docker Build:** Successfully built in 28.9s
 
-**Next:** Start Docker Desktop and run:
+**Container Testing:**
 ```bash
-docker build -t simple-jwt-api .
-docker run -p 8080:8080 --env-file .env_file simple-jwt-api
+✓ Build: docker build -t simple-jwt-api . (28.9s)
+✓ Run:   docker run -d -p 8080:8080 --env-file .env_file simple-jwt-api
+✓ Test:  All 3 endpoints verified
 ```
+
+**Endpoint Test Results:**
+| Endpoint | Method | Test | Result |
+|----------|--------|------|--------|
+| `/` | GET | Health check | ✅ "Healthy" |
+| `/auth` | POST | Generate token | ✅ JWT returned |
+| `/contents` | GET | Decode token | ✅ {"email":"test@example.com"} |
+| `/contents` | GET | Missing auth | ✅ 401 UNAUTHORIZED |
+
+**Gunicorn Logs:**
+- ✅ Server started on 0.0.0.0:8080
+- ✅ Worker process booted (PID 9)
+- ✅ Application logging functional (INFO/WARNING levels)
+- ✅ JWT secret loaded from environment variable
 
 ---
 
@@ -150,16 +166,14 @@ docker run -p 8080:8080 --env-file .env_file simple-jwt-api
 - ✅ Flask application with JWT authentication
 - ✅ Comprehensive unit tests (9/9 passing)
 - ✅ Environment configuration
-- ✅ Dockerfile (not yet built - Docker Desktop offline)
+- ✅ Dockerfile built and tested successfully
+- ✅ Container verified - all endpoints working
 - ✅ CodeBuild specification
 - ✅ Kubernetes manifests
 - ✅ CloudFormation template
 - ✅ Documentation
 
-**Blocked:**
-- ⏸️ Docker build waiting for Docker Desktop startup
-
-**Pending AWS Deployment:**
+**Ready for AWS Deployment:**
 - ⏳ EKS cluster creation (eksctl command ready)
 - ⏳ IAM role creation (UdacityFlaskDeployCBKubectlRole)
 - ⏳ Parameter Store setup (JWT_SECRET)
@@ -173,12 +187,6 @@ docker run -p 8080:8080 --env-file .env_file simple-jwt-api
 ---
 
 ## Next Steps
-
-### Immediate (Before AWS)
-1. **Start Docker Desktop**
-2. **Build Docker image:** `docker build -t simple-jwt-api .`
-3. **Test container locally:** `docker run -p 8080:8080 --env-file .env_file simple-jwt-api`
-4. **Verify all 3 endpoints** work in container
 
 ### AWS Deployment (When Ready)
 1. **Create EKS cluster** with Spot instances (30-45 min):
@@ -228,6 +236,7 @@ docker run -p 8080:8080 --env-file .env_file simple-jwt-api
 
 ### Rubric Compliance
 ✅ Dockerfile compiles locally  
+✅ Docker image runs correctly (all 3 endpoints verified)  
 ✅ Docker contains correct commands (python:stretch base, gunicorn)  
 ✅ Environment variable JWT_SECRET in .env_file  
 ✅ buildspec.yml uses Parameter Store for JWT_SECRET  
@@ -267,4 +276,21 @@ docker run -p 8080:8080 --env-file .env_file simple-jwt-api
 ---
 
 **Last Updated:** February 6, 2026  
-**Next Review:** After Docker build verification
+**Next Milestone:** AWS EKS cluster deployment
+
+---
+
+## Containerization Test Summary (February 6, 2026)
+
+**Build Time:** 28.9s  
+**Base Image:** public.ecr.aws/sam/build-python3.7:latest (linux/amd64)  
+**Server:** Gunicorn 20.1.0  
+**Platform Note:** Running on Apple Silicon (ARM64) via emulation - works correctly
+
+**All endpoints verified working:**
+- Health check: "Healthy"
+- Auth generation: JWT token returned
+- Token decode: Email payload extracted
+- Error handling: 401 on missing auth
+
+**Production readiness:** ✅ Ready for ECR push and EKS deployment
