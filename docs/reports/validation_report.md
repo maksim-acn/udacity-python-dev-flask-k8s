@@ -12,6 +12,7 @@ The verification scripts were executed to validate the project status. Below is 
 | **Prerequisites** | `verify-prereqs.sh` | 🔴 **FAILED** | Missing core tools: `python`, `pip`, `aws`, `eksctl`. `docker` and `kubectl` are available. |
 | **Local App** | `verify-local.sh` | 🔴 **FAILED** | Failed to install dependencies due to missing `pip`. |
 | **Docker** | `verify-docker.sh` | 🟢 **PASSED** | Docker image built successfully. Base image, requirements, and entrypoint verified. |
+| **Local Docker Run** | Manual Verification | 🟢 **PASSED** | Container runs locally. Health, Auth, and Contents endpoints verified successfully. |
 | **EKS Cluster** | `verify-eks.sh` | 🔴 **FAILED** | AWS not configured. Connection to cluster refused (likely due to missing credentials/cluster). |
 | **Deployment** | `verify-deployment.sh` | 🔴 **FAILED** | Kubernetes Service `simple-jwt-api` not found in default namespace. |
 | **CI/CD** | `verify-cicd.sh` | 🟢 **PASSED** | Configuration files (`buildspec.yml`, CloudFormation) exist and contain required values. |
@@ -32,6 +33,12 @@ The verification scripts were executed to validate the project status. Below is 
     - Checks for `ENTRYPOINT`, `COPY`, `requirements.txt` passed.
     - `.env_file` and `.gitignore` setup is correct.
     - Image `simple-jwt-api` built successfully.
+- **Deep Local Verification**:
+    - Ran container `simple-jwt-api-verify` on port 18080.
+    - **Health Check**: `GET /` returned "Healthy".
+    - **Auth Check**: `POST /auth` returned valid JWT.
+    - **Content Check**: `GET /contents` with JWT returned `{"email":"test@test.com"}`.
+
 
 ### 4. Cloud & Deployment (EKS / CI/CD)
 - **CI/CD Config**: Files (`buildspec.yml`, `ci-cd-codepipeline.cfn.yml`) are correctly set up and passed static analysis.
