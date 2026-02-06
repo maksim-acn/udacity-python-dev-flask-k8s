@@ -205,3 +205,15 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Project-specific
+# Downloaded archives
+*.zip
+udacity-repo.zip
+cd0157-Server-Deployment-and-Containerization-master/
+
+# Local environment file
+.env_file
+
+# Archive directory (backup/reference files)
+archive/

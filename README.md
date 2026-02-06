@@ -62,6 +62,34 @@ curl http://localhost:8080/contents \
   -H "Authorization: Bearer $TOKEN"
 ```
 
+## Verification Scripts
+
+Automated checks are available in the `scripts` directory.
+
+```bash
+# Make scripts executable
+chmod +x scripts/*.sh
+
+# Run the full verification suite
+./scripts/verify-all.sh
+
+# Or run individual phases
+./scripts/verify-prereqs.sh
+./scripts/verify-local.sh
+./scripts/verify-docker.sh
+./scripts/verify-cicd.sh
+./scripts/verify-eks.sh
+./scripts/verify-deployment.sh
+```
+
+Common controls:
+
+- `VERIFY_SKIP_TESTS=1` to skip pytest
+- `VERIFY_SKIP_DOCKER_BUILD=1` to skip docker build
+- `VERIFY_RUN_CONTAINER=1` to run the container check
+- `VERIFY_REQUIRE_AWS=1` to require AWS access
+- `APP_URL=http://127.0.0.1:8080` to override local URL
+
 ## AWS Deployment (Cost-Optimized)
 
 ### Estimated Costs
