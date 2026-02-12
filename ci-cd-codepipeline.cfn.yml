@@ -35,12 +35,20 @@ Parameters:
     Default: UdacityFlaskDeployCBKubectlRole
     Description: IAM role name for kubectl commands in CodeBuild
 
+  ProjectTagValue:
+    Type: String
+    Default: max-genai
+    Description: Tag value applied to supported AWS resources (Key=Project)
+
 Resources:
   # ECR Repository for Docker images
   EcrRepository:
     Type: AWS::ECR::Repository
     Properties:
       RepositoryName: !Sub "${EksClusterName}"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTagValue
       ImageScanningConfiguration:
         ScanOnPush: true
       LifecyclePolicy:
@@ -68,6 +76,9 @@ Resources:
     DeletionPolicy: Delete
     Properties:
       BucketName: !Sub "${EksClusterName}-pipeline-artifacts-${AWS::AccountId}"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTagValue
       VersioningConfiguration:
         Status: Enabled
       BucketEncryption:
@@ -80,6 +91,9 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub "${EksClusterName}-codebuild-role"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTagValue
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -125,6 +139,9 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub "${EksClusterName}-codepipeline-role"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTagValue
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -155,6 +172,9 @@ Resources:
     Properties:
       Name: !Sub "${EksClusterName}-build"
       Description: Build and deploy Flask JWT API to EKS
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTagValue
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Artifacts:
         Type: CODEPIPELINE
@@ -185,6 +205,9 @@ Resources:
     Properties:
       Name: !Sub "${EksClusterName}-pipeline"
       RoleArn: !GetAtt CodePipelineServiceRole.Arn
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTagValue
       ArtifactStore:
         Type: S3
         Location: !Ref ArtifactBucket

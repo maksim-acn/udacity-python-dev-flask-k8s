@@ -16,6 +16,8 @@ This plan follows the learning sequence in `docs/project_description` (01→09) 
 - Image injection into Kubernetes: template substitution for `CONTAINER_IMAGE` in `simple_jwt_api.yml`.
 - JWT secret source of truth: AWS SSM Parameter Store (`JWT_SECRET`), injected into the cluster at deploy time.
 - Cluster approach: cost-optimized settings as described in the repo README (rather than Udacity’s canonical instance sizing).
+- Default node instance type: `t3a.small` (prefer Spot where appropriate), fallback to `t3.small` if capacity is an issue in `eu-central-1`.
+- AWS resource tagging: add `Project=max-genai` to any AWS resources we create (unless a project requirement explicitly prevents tagging).
 
 ---
 
@@ -98,6 +100,7 @@ This plan follows the learning sequence in `docs/project_description` (01→09) 
 **Do**
 
 - Create/update `JWT_SECRET` in SSM as `SecureString` in `eu-central-1`.
+- Add tag `Project=max-genai` to the SSM parameter.
 
 **Verify**
 
@@ -140,6 +143,7 @@ This plan follows the learning sequence in `docs/project_description` (01→09) 
 - Create IAM role `UdacityFlaskDeployCBKubectlRole` using the trust policy.
 - Attach the role policy that allows EKS describe + SSM read.
 - Patch EKS aws-auth ConfigMap to grant this role Kubernetes permissions.
+  - When creating the IAM role, add tag `Project=max-genai`.
 
 **Verify**
 
@@ -165,6 +169,7 @@ This plan follows the learning sequence in `docs/project_description` (01→09) 
   - Branch: `main`
   - Kubectl role name: `UdacityFlaskDeployCBKubectlRole`
 - Create/update the stack.
+  - Pass stack tags (at minimum `Project=max-genai`) so the stack and supported resources are tagged consistently.
 
 **Verify**
 

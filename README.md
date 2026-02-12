@@ -105,7 +105,7 @@ Common controls:
 ```bash
 eksctl create cluster \
   --name simple-jwt-api \
-  --region us-east-2 \
+  --region eu-central-1 \
   --version 1.22 \
   --nodegroup-name spot-nodes \
   --node-type t3a.small \
@@ -113,7 +113,8 @@ eksctl create cluster \
   --nodes-min 2 \
   --nodes-max 2 \
   --managed \
-  --spot
+  --spot \
+  --tags Project=max-genai
 ```
 
 ### 2. Store JWT Secret in Parameter Store
@@ -123,7 +124,14 @@ aws ssm put-parameter \
   --name JWT_SECRET \
   --value "your-production-secret" \
   --type SecureString \
-  --region us-east-2
+  --region eu-central-1
+
+# Tag the parameter
+aws ssm add-tags-to-resource \
+  --resource-type Parameter \
+  --resource-id JWT_SECRET \
+  --tags Key=Project,Value=max-genai \
+  --region eu-central-1
 ```
 
 ### 3. Create IAM Role for CodeBuild
@@ -184,7 +192,8 @@ aws cloudformation create-stack \
     ParameterKey=GitHubUser,ParameterValue=YOUR_GITHUB_USERNAME \
     ParameterKey=GitHubToken,ParameterValue=YOUR_GITHUB_TOKEN \
   --capabilities CAPABILITY_NAMED_IAM \
-  --region us-east-2
+  --tags Project=max-genai \
+  --region eu-central-1
 ```
 
 ### 6. Get External IP
@@ -198,17 +207,18 @@ kubectl get svc simple-jwt-api
 ```bash
 # Delete EKS cluster
 eksctl delete cluster simple-jwt-api --region=us-east-2
+eksctl delete cluster simple-jwt-api --region=eu-central-1
 
 # Delete CloudFormation stack
 aws cloudformation delete-stack \
   --stack-name simple-jwt-api-pipeline \
-  --region us-east-2
+  --region eu-central-1
 
 # Delete ECR repository
 aws ecr delete-repository \
   --repository-name simple-jwt-api \
   --force \
-  --region us-east-2
+  --region eu-central-1
 ```
 
 ## Project Structure
