@@ -2,7 +2,7 @@
 
 **Project:** Udacity Flask App on Kubernetes  
 **Start Date:** February 6, 2026  
-**Status:** Phase 1 Complete (Local Development)
+**Status:** Local tests verified on Python 3.9 (uv venv)
 
 ---
 
@@ -29,10 +29,12 @@ Selected a combination of Option A (minimal AWS usage) and Option D (cost-optimi
 
 **Cost-Optimized AWS Configuration:**
 - **Instance Type:** t3a.small (AMD-based, ~5% cheaper than t3.small)
+- **Fallback Instance Type:** t3.small (if Spot/capacity issues in eu-central-1)
 - **Purchase Model:** Spot instances (70-90% discount)
 - **Node Count:** 2 nodes (project requirement)
 - **Networking:** NAT Gateway retained (production-like security)
-- **Region:** us-east-2 (recommended per project docs)
+- **Region:** eu-central-1 (matches local AWS configuration)
+- **Tagging:** Apply `Project=max-genai` to AWS resources we create (when supported)
 
 **Estimated AWS Costs:**
 | Resource | Hourly Cost |
@@ -73,7 +75,15 @@ Selected a combination of Option A (minimal AWS usage) and Option D (cost-optimi
 - Proper error handling with 400/401 status codes
 - Logging configured via LOG_LEVEL environment variable
 - JWT token format: Bearer authentication
-- All tests pass on Python 3.13
+- All tests pass on Python 3.9.25 in `.venv` (created with `uv`)
+
+#### Environment Verification (Feb 12, 2026)
+
+- Created a Python 3.9 venv via `uv` (Homebrew permissions prevented installing `python@3.9`).
+- Ran unit tests in the venv:
+  - Python: 3.9.25
+  - pytest: 7.1.2
+  - Result: 9 passed
 
 ---
 
@@ -110,6 +120,11 @@ Selected a combination of Option A (minimal AWS usage) and Option D (cost-optimi
 - ✅ Worker process booted (PID 9)
 - ✅ Application logging functional (INFO/WARNING levels)
 - ✅ JWT secret loaded from environment variable
+
+#### Docker Desktop / Apple Silicon note (Feb 12, 2026)
+
+- Docker socket existed but daemon/backend was not running initially; resolved by starting Docker Desktop.
+- On Apple Silicon, the base image is `linux/amd64` while Docker Desktop VM is `linux/arm64`; use `--platform linux/amd64` for local build/run when validating images intended for `t3a/t3` EKS nodes.
 
 ---
 

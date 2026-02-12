@@ -7,6 +7,7 @@ source "$SCRIPT_DIR/_common.sh"
 
 IMAGE_TAG="${IMAGE_TAG:-simple-jwt-api:verify}"
 CONTAINER_NAME="${CONTAINER_NAME:-simple-jwt-api-verify}"
+DOCKER_PLATFORM="${DOCKER_PLATFORM:-linux/amd64}"
 
 check_command docker
 check_file_exists "$ROOT_DIR/Dockerfile"
@@ -34,7 +35,7 @@ check_file_contains "$ROOT_DIR/.gitignore" ".env_file"
 if [[ "${VERIFY_SKIP_DOCKER_BUILD:-}" == "1" ]]; then
   warn "skipping docker build (VERIFY_SKIP_DOCKER_BUILD=1)"
 else
-  run_check_verbose "build docker image" "cd '$ROOT_DIR' && docker build -t '$IMAGE_TAG' ."
+  run_check_verbose "build docker image" "cd '$ROOT_DIR' && docker build --platform '$DOCKER_PLATFORM' -t '$IMAGE_TAG' ."
 fi
 
 if [[ "${VERIFY_RUN_CONTAINER:-}" == "1" ]]; then
@@ -42,7 +43,7 @@ if [[ "${VERIFY_RUN_CONTAINER:-}" == "1" ]]; then
     fail "cannot run container without .env_file"
   else
     docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
-    run_check_verbose "run container" "cd '$ROOT_DIR' && docker run -d --name '$CONTAINER_NAME' --env-file .env_file -p 18080:8080 '$IMAGE_TAG'"
+    run_check_verbose "run container" "cd '$ROOT_DIR' && docker run --platform '$DOCKER_PLATFORM' -d --name '$CONTAINER_NAME' --env-file .env_file -p 18080:8080 '$IMAGE_TAG'"
     sleep 2
     check_http "container health endpoint" "http://127.0.0.1:18080/"
     docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true

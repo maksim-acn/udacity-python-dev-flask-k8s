@@ -1,6 +1,6 @@
 # Project Evaluation Checklist
 
-Step-by-step verification checklist for the Flask JWT API Containerization project. Each phase maps to rubric criteria. For automation, see [scripts/README.md](scripts/README.md).
+Step-by-step verification checklist for the Flask JWT API Containerization project. Each phase maps to rubric criteria. For automation, see [scripts/README.md](../scripts/README.md).
 
 ---
 
@@ -27,7 +27,7 @@ Step-by-step verification checklist for the Flask JWT API Containerization proje
 | 2.4 | Health endpoint works | `curl http://127.0.0.1:8080/` returns `"Healthy"` |
 | 2.5 | Auth endpoint works | `curl -X POST http://127.0.0.1:8080/auth -d '{"email":"test@test.com","password":"test"}' -H "Content-Type: application/json"` returns JWT |
 | 2.6 | Contents endpoint works | `curl http://127.0.0.1:8080/contents -H "Authorization: Bearer <JWT>"` returns decoded payload |
-| 2.7 | Unit tests pass | `python -m pytest test_main.py` |
+| 2.7 | Unit tests pass | `python -m pytest test_main.py` (verified: 2026-02-12, Python 3.9.25, 9 passed) |
 
 ---
 
@@ -41,9 +41,9 @@ Step-by-step verification checklist for the Flask JWT API Containerization proje
 | 3.4 | Dockerfile uses Gunicorn entrypoint | Contains `ENTRYPOINT ["gunicorn", "-b", ":8080", "main:APP"]` |
 | 3.5 | `.env_file` created | File exists with `JWT_SECRET=value` and `LOG_LEVEL=DEBUG` (no `export`) |
 | 3.6 | `.env_file` in `.gitignore` | `grep ".env_file" .gitignore` returns match |
-| 3.7 | Docker image builds | `docker build -t myimage .` succeeds |
+| 3.7 | Docker image builds | `docker build -t myimage .` succeeds (verified: 2026-02-12) |
 | 3.8 | Container runs | `docker run --name myContainer --env-file=.env_file -p 80:8080 myimage` |
-| 3.9 | Container health endpoint | `curl http://localhost:80/` returns `"Healthy"` |
+| 3.9 | Container health endpoint | `curl http://localhost:80/` returns `"Healthy"` (verified: 2026-02-12) |
 | 3.10 | Container auth endpoint | POST to `http://localhost:80/auth` returns JWT |
 | 3.11 | Container contents endpoint | GET `http://localhost:80/contents` with JWT returns payload |
 

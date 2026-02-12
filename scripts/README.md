@@ -28,6 +28,7 @@ chmod +x *.sh
 - `VERIFY_REQUIRE_APP=1` - fail if local app is not reachable
 - `VERIFY_SKIP_DOCKER_BUILD=1` - skip docker build
 - `VERIFY_RUN_CONTAINER=1` - run container check on port 18080
+- `DOCKER_PLATFORM` - docker platform for build/run (default: linux/amd64)
 - `VERIFY_REQUIRE_AWS=1` - require AWS access for CI/CD and EKS checks
 - `IMAGE_TAG` - override docker image tag
 - `CONTAINER_NAME` - override docker container name

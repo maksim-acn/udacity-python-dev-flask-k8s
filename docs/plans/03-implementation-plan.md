@@ -19,6 +19,11 @@ This plan follows the learning sequence in `docs/project_description` (01→09) 
 - Default node instance type: `t3a.small` (prefer Spot where appropriate), fallback to `t3.small` if capacity is an issue in `eu-central-1`.
 - AWS resource tagging: add `Project=max-genai` to any AWS resources we create (unless a project requirement explicitly prevents tagging).
 
+**Last verified**
+
+- 2026-02-12: Local unit tests passed (9/9) using Python 3.9.25 in `.venv` created with `uv`.
+- 2026-02-12: Docker image builds successfully; Docker Desktop daemon reachable.
+
 ---
 
 ## Phase 0 — Prerequisites and tooling
