@@ -32,7 +32,7 @@ chmod +x *.sh
 - `IMAGE_TAG` - override docker image tag
 - `CONTAINER_NAME` - override docker container name
 - `CLUSTER_NAME` - override EKS cluster name
-- `AWS_REGION` - override AWS region for EKS
+- `AWS_REGION` - override AWS region for EKS (default: eu-central-1)
 - `SERVICE_NAME` - override Kubernetes service name
 - `K8S_NAMESPACE` - override Kubernetes namespace
 

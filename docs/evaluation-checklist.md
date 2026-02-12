@@ -53,7 +53,7 @@ Step-by-step verification checklist for the Flask JWT API Containerization proje
 
 | # | Check | Validation |
 |---|-------|-----------|
-| 4.1 | EKS cluster created | `eksctl create cluster --name simple-jwt-api --nodes=2 --version=1.22 --instance-types=t2.medium --region=us-east-2` |
+| 4.1 | EKS cluster created | `eksctl create cluster --name simple-jwt-api --nodes=2 --version=1.22 --instance-types=t2.medium --region=eu-central-1` |
 | 4.2 | Cluster nodes ready | `kubectl get nodes` shows 2 Ready nodes |
 | 4.3 | `trust.json` has correct account ID | Verify `<ACCOUNT_ID>` replaced with actual AWS account ID |
 | 4.4 | IAM role created | `aws iam get-role --role-name UdacityFlaskDeployCBKubectlRole` returns role |
@@ -113,6 +113,6 @@ Step-by-step verification checklist for the Flask JWT API Containerization proje
 
 | # | Task | Command |
 |---|------|---------|
-| C.1 | Delete EKS cluster | `eksctl delete cluster simple-jwt-api --region=us-east-2` |
+| C.1 | Delete EKS cluster | `eksctl delete cluster simple-jwt-api --region=eu-central-1` |
 | C.2 | Delete JWT_SECRET parameter | `aws ssm delete-parameter --name JWT_SECRET` |
 | C.3 | Delete CloudFormation stack | Via AWS Console or CLI |

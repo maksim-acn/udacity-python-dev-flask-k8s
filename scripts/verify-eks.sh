@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/_common.sh"
 
 CLUSTER_NAME="${CLUSTER_NAME:-simple-jwt-api}"
-REGION="${AWS_REGION:-us-east-2}"
+REGION="${AWS_REGION:-eu-central-1}"
 
 if [[ "${VERIFY_REQUIRE_AWS:-}" == "1" ]]; then
   run_check "AWS caller identity" "aws sts get-caller-identity"
