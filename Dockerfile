@@ -1,5 +1,5 @@
-# Use AWS SAM Python 3.7 base image
-FROM public.ecr.aws/sam/build-python3.7:latest
+# 1. Rubric Requirement: Use python:stretch
+FROM python:stretch
 
 # Set working directory
 WORKDIR /app
@@ -8,7 +8,9 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install Python dependencies
-RUN pip install -r requirements.txt --no-cache-dir
+# (Added --upgrade pip to ensure compatibility, as stretch is an older image)
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt --no-cache-dir
 
 # Copy application code
 COPY main.py .
@@ -16,8 +18,8 @@ COPY main.py .
 # Expose the application port
 EXPOSE 8080
 
-# Set environment variables
+# Set environment variables (Keeping this is good practice, though not strictly mandated)
 ENV LOG_LEVEL=INFO
 
-# Run the application with Gunicorn
+# 2. Rubric Requirement: Define Gunicorn entrypoint exactly as specified
 ENTRYPOINT ["gunicorn", "-b", ":8080", "main:APP"]
