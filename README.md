@@ -4,6 +4,8 @@ Udacity Project: Deploy Your Flask App to Kubernetes Using EKS
 
 A containerized Flask API with JWT authentication, deployed to AWS EKS via CI/CD pipeline.
 
+**🚀 Live Demo:** [http://a961d15c30a36483d805f6a1105ccd4a-1671082022.eu-north-1.elb.amazonaws.com](http://a961d15c30a36483d805f6a1105ccd4a-1671082022.eu-north-1.elb.amazonaws.com)
+
 ## Endpoints
 
 | Method | Path       | Description                          |

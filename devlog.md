@@ -2,7 +2,7 @@
 
 **Project:** Udacity Flask App on Kubernetes  
 **Start Date:** February 6, 2026  
-**Status:** Local tests verified on Python 3.9 (uv venv). Environment tools (AWS CLI, eksctl) verified.
+**Status:** AWS Deployment Complete. Live on EKS in `eu-north-1`.
 
 ---
 
@@ -195,15 +195,14 @@ Selected a combination of Option A (minimal AWS usage) and Option D (cost-optimi
 - ✅ Documentation
 
 **Ready for AWS Deployment:**
-- ⏳ EKS cluster creation (eksctl command ready)
-- ⏳ IAM role creation (UdacityFlaskDeployCBKubectlRole)
-- ⏳ Parameter Store setup (JWT_SECRET)
-- ⏳ CloudFormation stack deployment
-- ⏳ GitHub token configuration
-- ⏳ Pipeline validation
-- ⏳ External endpoint testing
-- ⏳ Screenshot capture
-- ⏳ Resource cleanup
+- ✅ EKS cluster creation (eksctl command ready)
+- ✅ IAM role creation (UdacityFlaskDeployCBKubectlRole)
+- ✅ Parameter Store setup (JWT_SECRET)
+- ✅ CloudFormation stack deployment
+- ✅ GitHub token configuration
+- ✅ Pipeline validation
+- ✅ External endpoint testing
+- ⏳ Resource cleanup (Postponed for review)
 
 ---
 
@@ -296,8 +295,39 @@ Selected a combination of Option A (minimal AWS usage) and Option D (cost-optimi
 
 ---
 
-**Last Updated:** February 6, 2026  
-**Next Milestone:** AWS EKS cluster deployment
+**Last Updated:** February 13, 2026
+**Next Milestone:** Resource Cleanup
+
+---
+
+## Phase 5: AWS Deployment ✅ COMPLETE
+
+### Infrastructure
+- **Region:** `eu-north-1` (Stockholm) - selected for cost/latency.
+- **Cluster:** `simple-jwt-api` (2 nodes, `t3.small` Spot instances).
+- **CI/CD:** AWS CodePipeline + CodeBuild + GitHub integration.
+
+### Deployment Challenges & Fixes
+1. **InvalidImageName Error:**
+   - **Issue:** The initial deployment failed because the `simple_jwt_api.yml` manifest contained a placeholder `CONTAINER_IMAGE` that wasn't being replaced.
+   - **Fix:** Updated `buildspec.yml` to include a `sed` command in the `post_build` phase:
+     ```bash
+     sed -i "s@CONTAINER_IMAGE@$REPOSITORY_URI:$IMAGE_TAG@" simple_jwt_api.yml
+     ```
+   - **Verification:** Pipeline re-triggered, build succeeded, and pods started successfully.
+
+2. **Pipeline Lock:**
+   - **Issue:** The first failed execution (`c3926e08`) remained in `Stopping` state, preventing the new execution (`b2f8dca9`) from entering the `Build` stage.
+   - **Fix:** Manually monitored and managed the pipeline state to ensure the fix was deployed.
+
+### Verification Results (Feb 13, 2026)
+**URL:** `http://a961d15c30a36483d805f6a1105ccd4a-1671082022.eu-north-1.elb.amazonaws.com`
+
+| Endpoint | Result | Status |
+|----------|--------|--------|
+| `GET /` | `Healthy` | ✅ |
+| `POST /auth` | Token Generated | ✅ |
+| `GET /contents` | Payload Returned | ✅ |
 
 ---
 
