@@ -2,7 +2,7 @@
 
 **Project:** Udacity Flask App on Kubernetes  
 **Start Date:** February 6, 2026  
-**Status:** Local tests verified on Python 3.9 (uv venv)
+**Status:** Local tests verified on Python 3.9 (uv venv). Environment tools (AWS CLI, eksctl) verified.
 
 ---
 
@@ -84,6 +84,12 @@ Selected a combination of Option A (minimal AWS usage) and Option D (cost-optimi
   - Python: 3.9.25
   - pytest: 7.1.2
   - Result: 9 passed
+
+#### Environment Verification (Feb 13, 2026)
+
+- **Python 3.9**: Confirmed usage of `uv` to manage Python 3.9 virtual environments (`.venv`).
+- **AWS Tools**: Verified `aws` CLI and `eksctl` are installed and accessible in the system path.
+- **Validation Report**: Updated `docs/reports/validation_report.md` to reflect the passing status of all prerequisites.
 
 ---
 

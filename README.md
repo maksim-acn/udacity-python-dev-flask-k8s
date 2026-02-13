@@ -15,18 +15,27 @@ A containerized Flask API with JWT authentication, deployed to AWS EKS via CI/CD
 ## Quick Start - Local Development
 
 ### Prerequisites
-- Python 3.7+
+- Python 3.9+
+- `uv` (Fast Python package installer and venv manager)
 - Docker Desktop (Mac/Windows) or Docker Engine (Linux)
+- AWS CLI v2
+- `eksctl`
+- `kubectl`
 
-### 1. Run without Docker
+### Status
+Current build and verification status: [Validation Report](docs/reports/validation_report.md)
+
+### 1. Run without Docker (using uv)
 
 ```bash
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Create virtual environment with Python 3.9
+uv venv --python 3.9
+
+# Activate virtual environment
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install dependencies
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 
 # Run tests
 python -m pytest test_main.py -v
