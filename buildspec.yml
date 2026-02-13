@@ -42,6 +42,8 @@ phases:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo "Updating kubeconfig..."
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_DEFAULT_REGION
+      - echo "Replacing image in manifest..."
+      - sed -i "s@CONTAINER_IMAGE@$REPOSITORY_URI:$IMAGE_TAG@" simple_jwt_api.yml
       - echo "Applying Kubernetes manifests..."
       - kubectl apply -f simple_jwt_api.yml
       - echo "Verifying deployment..."
